@@ -7,6 +7,8 @@ public class PuckScript : MonoBehaviour
 
     public ScoreScript ScoreScriptInstance;
     public static bool WasGoal { get; private set; }
+
+    public float MaxSpeed;
     private Rigidbody2D rb;
 
     // Use this for initialization
@@ -40,5 +42,10 @@ public class PuckScript : MonoBehaviour
         yield return new WaitForSecondsRealtime(1);
         WasGoal = false;
         rb.velocity = rb.position = new Vector2(0, 0);
+    }
+
+    private void FixedUpdate()
+    {
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, MaxSpeed);
     }
 }
