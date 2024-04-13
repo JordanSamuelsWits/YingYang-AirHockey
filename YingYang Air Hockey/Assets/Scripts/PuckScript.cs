@@ -26,22 +26,27 @@ public class PuckScript : MonoBehaviour
             {
                 ScoreScriptInstance.Increment(ScoreScript.Score.PlayerScore);
                 WasGoal = true;
-                StartCoroutine(ResetPuck());
+                StartCoroutine(ResetPuck(false));
             }
             else if (other.tag == "PlayerGoal")
             {
                 ScoreScriptInstance.Increment(ScoreScript.Score.AiScore);
                 WasGoal = true;
-                StartCoroutine(ResetPuck());
+                StartCoroutine(ResetPuck(true));
             }
         }
     }
 
-    private IEnumerator ResetPuck()
+    private IEnumerator ResetPuck(bool didAiScore)
     {
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(1.5f);
         WasGoal = false;
         rb.velocity = rb.position = new Vector2(0, 0);
+
+        if (didAiScore)
+            rb.position = new Vector2(0f, -1.6f);
+        else
+            rb.position = new Vector2(0f, 1.6f);
     }
 
     private void FixedUpdate()
