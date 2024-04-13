@@ -7,10 +7,23 @@ public class PlayerMovement : MonoBehaviour
     bool canMove;
     Vector2 playerSize;
 
+    Rigidbody2D rb;
+
+    public Transform BoundaryHolder;
+
+    Boundary playerBoundary;
+
     // Use this for initialization
     void Start()
     {
-        playerSize = gameObject.GetComponent<SpriteRenderer>().bounds.extents;
+        playerSize = GetComponent<SpriteRenderer>().bounds.extents;
+        rb = GetComponent<Rigidbody2D>();
+
+        playerBoundary = new Boundary(BoundaryHolder.GetChild(0).position.y,
+                                      BoundaryHolder.GetChild(1).position.y,
+                                      BoundaryHolder.GetChild(2).position.x,
+                                      BoundaryHolder.GetChild(3).position.x);
+
     }
 
     // Update is called once per frame
@@ -39,7 +52,11 @@ public class PlayerMovement : MonoBehaviour
 
             if (canMove)
             {
-                transform.position = mousePos;
+                Vector2 clampedMousePos = new Vector2(Mathf.Clamp(mousePos.x, playerBoundary.Left,
+                                                                  playerBoundary.Right),
+                                                      Mathf.Clamp(mousePos.y, playerBoundary.Down,
+                                                                  playerBoundary.Up));
+                rb.MovePosition(clampedMousePos);
             }
         }
         else
