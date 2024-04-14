@@ -9,34 +9,49 @@ public class ScoreScript : MonoBehaviour
         PlayerScore
     }
 
-    public TMP_Text AiScoreTxt; // Reference to TextMeshPro Text for AI Score
-    public TMP_Text PlayerScoreTxt; // Reference to TextMeshPro Text for Player Score
+    public TMP_Text AiScoreTxt;
+    public TMP_Text PlayerScoreTxt;
 
-    private int aiScore, playerScore;
+    public UiManager uiManager;
+
+    public int MaxScore;
+
+    private int aiScore;
+    private int playerScore;
+
+    private int AiScore
+    {
+        get { return aiScore; }
+        set
+        {
+            aiScore = value;
+            if (value == MaxScore)
+                uiManager.ShowRestartCanvas(true);
+        }
+    }
+
+    private int PlayerScore
+    {
+        get { return playerScore; }
+        set
+        {
+            playerScore = value;
+            if (value == MaxScore)
+                uiManager.ShowRestartCanvas(false);
+        }
+    }
 
     public void Increment(Score whichScore)
     {
         if (whichScore == Score.AiScore)
-        {
-            aiScore++;
-            UpdateTextMeshProText(AiScoreTxt, aiScore);
-        }
-        else if (whichScore == Score.PlayerScore)
-        {
-            playerScore++;
-            UpdateTextMeshProText(PlayerScoreTxt, playerScore);
-        }
+            AiScoreTxt.text = (++AiScore).ToString();
+        else
+            PlayerScoreTxt.text = (++PlayerScore).ToString();
     }
 
-    private void UpdateTextMeshProText(TMP_Text textMeshProText, int value)
+    public void ResetScores()
     {
-        if (textMeshProText != null)
-        {
-            textMeshProText.text = value.ToString();
-        }
-        else
-        {
-            Debug.LogWarning("TextMeshPro Text component is not assigned.");
-        }
+        AiScore = PlayerScore = 0;
+        AiScoreTxt.text = PlayerScoreTxt.text = "0";
     }
 }

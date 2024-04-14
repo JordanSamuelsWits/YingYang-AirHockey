@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+
     public AudioClip PuckCollision;
     public AudioClip Goal;
+    public AudioClip LostGame;
+    public AudioClip WonGame;
 
     private AudioSource audioSource;
 
@@ -22,5 +25,15 @@ public class AudioManager : MonoBehaviour
     public void PlayGoal()
     {
         audioSource.PlayOneShot(Goal);
+    }
+
+    public void PlayLostGame()
+    {
+        audioSource.PlayOneShot(LostGame);
+    }
+
+    public void PlayWonGame()
+    {
+        audioSource.PlayOneShot(WonGame);
     }
 }

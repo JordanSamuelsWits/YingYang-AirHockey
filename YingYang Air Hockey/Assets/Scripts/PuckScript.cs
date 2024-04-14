@@ -7,7 +7,6 @@ public class PuckScript : MonoBehaviour
 
     public ScoreScript ScoreScriptInstance;
     public static bool WasGoal { get; private set; }
-
     public float MaxSpeed;
 
     public AudioManager audioManager;
@@ -46,16 +45,22 @@ public class PuckScript : MonoBehaviour
     {
         audioManager.PlayPuckCollision();
     }
+
     private IEnumerator ResetPuck(bool didAiScore)
     {
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(1);
         WasGoal = false;
         rb.velocity = rb.position = new Vector2(0, 0);
 
         if (didAiScore)
-            rb.position = new Vector2(0f, -1.6f);
+            rb.position = new Vector2(0, -1.6f);
         else
-            rb.position = new Vector2(0f, 1.6f);
+            rb.position = new Vector2(0, 1.6f);
+    }
+
+    public void CenterPuck()
+    {
+        rb.position = new Vector2(0, 0);
     }
 
     private void FixedUpdate()
