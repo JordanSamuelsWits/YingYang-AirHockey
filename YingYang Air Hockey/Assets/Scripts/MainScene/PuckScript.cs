@@ -10,6 +10,7 @@ public class PuckScript : MonoBehaviour
     public AudioManager audioManager;
 
     private Rigidbody2D rb;
+    private GameObject lastPlayer; // Track the last player who hit the puck
 
     // Use this for initialization
     void Start()
@@ -23,7 +24,19 @@ public class PuckScript : MonoBehaviour
     {
         if (!WasGoal)
         {
-            if (other.tag == "AiGoal")
+            if (other.CompareTag("Player") || other.CompareTag("Ai"))
+            {
+                if (lastPlayer == null || lastPlayer != other.gameObject)
+                {
+                    lastPlayer = other.gameObject; // Update last player who hit the puck
+                }
+                else
+                {
+                    // Deduct a point from the player who hit the puck more than once
+                    DeductPoint(lastPlayer);
+                }
+            }
+            else if (other.tag == "AiGoal")
             {
                 ScoreScriptInstance.Increment(ScoreScript.Score.PlayerScore);
                 WasGoal = true;
@@ -56,6 +69,19 @@ public class PuckScript : MonoBehaviour
             rb.position = new Vector2(0f, -1.6f); // AI scored, reset to player side
         else
             rb.position = new Vector2(0f, 1.6f); // Player scored, reset to AI side
+    }
+
+    private void DeductPoint(GameObject player)
+    {
+        // Determine which player to deduct a point from based on tag
+        if (player.CompareTag("Player"))
+        {
+            ScoreScriptInstance.Increment(ScoreScript.Score.AiScore); // Deduct point from AI
+        }
+        else if (player.CompareTag("Ai"))
+        {
+            ScoreScriptInstance.Increment(ScoreScript.Score.PlayerScore); // Deduct point from player
+        }
     }
 
     public void CenterPuck()
