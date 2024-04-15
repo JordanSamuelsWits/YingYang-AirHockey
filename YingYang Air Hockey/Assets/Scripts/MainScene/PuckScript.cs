@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PuckScript : MonoBehaviour
 {
-
     public ScoreScript ScoreScriptInstance;
     public static bool WasGoal { get; private set; }
     public float MaxSpeed;
@@ -18,6 +16,7 @@ public class PuckScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         WasGoal = false;
+        CenterPuck(); // Ensure puck starts at the center
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -48,19 +47,20 @@ public class PuckScript : MonoBehaviour
 
     private IEnumerator ResetPuck(bool didAiScore)
     {
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(1f); // Wait for a moment before resetting
         WasGoal = false;
-        rb.velocity = rb.position = new Vector2(0, 0);
+        rb.velocity = Vector2.zero;
+        CenterPuck(); // Reset puck position
 
         if (didAiScore)
-            rb.position = new Vector2(0, -1.6f);
+            rb.position = new Vector2(0f, -1.6f); // AI scored, reset to player side
         else
-            rb.position = new Vector2(0, 1.6f);
+            rb.position = new Vector2(0f, 1.6f); // Player scored, reset to AI side
     }
 
     public void CenterPuck()
     {
-        rb.position = new Vector2(0, 0);
+        rb.position = Vector2.zero; // Reset puck to the center
     }
 
     private void FixedUpdate()

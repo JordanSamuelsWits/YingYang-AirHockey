@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UiManager : MonoBehaviour
 {
@@ -114,5 +115,11 @@ public class UiManager : MonoBehaviour
 
         // Restart the coroutine for portal management
         StartCoroutine(ManagePortals());
+    }
+
+    public void ShowMenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Menu");
     }
 }

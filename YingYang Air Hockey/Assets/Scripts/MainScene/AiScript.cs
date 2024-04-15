@@ -35,6 +35,21 @@ public class AiScript : MonoBehaviour
                               PuckBoundaryHolder.GetChild(1).position.y,
                               PuckBoundaryHolder.GetChild(2).position.x,
                               PuckBoundaryHolder.GetChild(3).position.x);
+
+        switch (GameValues.Difficulty)
+        {
+            case GameValues.Difficulties.EASY:
+                MaxMovementSpeed = 10;
+                break;
+
+            case GameValues.Difficulties.MEDIUM:
+                MaxMovementSpeed = 15;
+                break;
+
+            case GameValues.Difficulties.HARD:
+                MaxMovementSpeed = 20;
+                break;
+        }
     }
 
     private void FixedUpdate()
