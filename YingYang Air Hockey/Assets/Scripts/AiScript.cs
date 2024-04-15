@@ -4,6 +4,7 @@ public class AiScript : MonoBehaviour
 {
 
     public float MaxMovementSpeed;
+
     private Rigidbody2D rb;
     private Vector2 startingPosition;
 

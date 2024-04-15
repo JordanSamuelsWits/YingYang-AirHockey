@@ -6,6 +6,11 @@ TagManager:
   tags:
   - AiGoal
   - PlayerGoal
+  - PortalB1
+  - PortalR1
+  - Puck
+  - PortalB2
+  - PortalR2
   layers:
   - Default
   - TransparentFX

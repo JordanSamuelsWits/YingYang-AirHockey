@@ -1,39 +1,61 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class AudioManager : MonoBehaviour
 {
+    [SerializeField] private AudioSource audioSource;
 
-    public AudioClip PuckCollision;
-    public AudioClip Goal;
-    public AudioClip LostGame;
-    public AudioClip WonGame;
+    [Header("Audio Clips")]
+    public AudioClip puckCollisionClip;
+    public AudioClip goalClip;
+    public AudioClip lostGameClip;
+    public AudioClip wonGameClip;
+    public AudioClip portalActivationClip;
 
-    private AudioSource audioSource;
-
-    private void Start()
+    private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        // Ensure AudioSource component is attached to the GameObject
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
     }
 
     public void PlayPuckCollision()
     {
-        audioSource.PlayOneShot(PuckCollision);
+        if (puckCollisionClip != null)
+            audioSource.PlayOneShot(puckCollisionClip);
+        else
+            Debug.LogWarning("Puck collision audio clip is not assigned in AudioManager.");
     }
 
     public void PlayGoal()
     {
-        audioSource.PlayOneShot(Goal);
+        if (goalClip != null)
+            audioSource.PlayOneShot(goalClip);
+        else
+            Debug.LogWarning("Goal audio clip is not assigned in AudioManager.");
     }
 
     public void PlayLostGame()
     {
-        audioSource.PlayOneShot(LostGame);
+        if (lostGameClip != null)
+            audioSource.PlayOneShot(lostGameClip);
+        else
+            Debug.LogWarning("Lost game audio clip is not assigned in AudioManager.");
     }
 
     public void PlayWonGame()
     {
-        audioSource.PlayOneShot(WonGame);
+        if (wonGameClip != null)
+            audioSource.PlayOneShot(wonGameClip);
+        else
+            Debug.LogWarning("Won game audio clip is not assigned in AudioManager.");
+    }
+
+    public void PlayPortalActivation()
+    {
+        if (portalActivationClip != null)
+            audioSource.PlayOneShot(portalActivationClip);
+        else
+            Debug.LogWarning("Won game audio clip is not assigned in AudioManager.");
     }
 }
