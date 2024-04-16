@@ -6,9 +6,9 @@ using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject countdownCanvas;
-    public TMP_Text countdownText;
-    public GameObject DifficultyToggles;
+    public GameObject countdownCanvas; // Reference to the countdown canvas GameObject
+    public TMP_Text countdownText; // Reference to the TMP_Text component for displaying countdown
+    public GameObject DifficultyToggles; // Reference to the GameObject containing difficulty toggles
 
     private void Start()
     {
