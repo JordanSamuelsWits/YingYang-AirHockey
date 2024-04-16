@@ -3,12 +3,6 @@ using TMPro;
 
 public class ScoreScript : MonoBehaviour
 {
-    public enum Score
-    {
-        AiScore,
-        PlayerScore
-    }
-
     public TMP_Text AiScoreTxt;
     public TMP_Text PlayerScoreTxt;
 
@@ -26,7 +20,7 @@ public class ScoreScript : MonoBehaviour
         {
             aiScore = value;
             if (value == MaxScore)
-                uiManager.ShowRestartCanvas(true);
+                uiManager.ShowRestartCanvas(false); // AI wins
         }
     }
 
@@ -37,21 +31,30 @@ public class ScoreScript : MonoBehaviour
         {
             playerScore = value;
             if (value == MaxScore)
-                uiManager.ShowRestartCanvas(false);
+                uiManager.ShowRestartCanvas(true); // Player wins
         }
     }
 
-    public void Increment(Score whichScore)
+    public void IncrementScore(string whichScore)
     {
-        if (whichScore == Score.AiScore)
+        if (whichScore == "AiGoal")
             AiScoreTxt.text = (++AiScore).ToString();
-        else
+        else if (whichScore == "PlayerGoal")
             PlayerScoreTxt.text = (++PlayerScore).ToString();
+    }
+
+    public void DecrementScore(string whichScore)
+    {
+        if (whichScore == "AiGoal" && AiScore > 0)
+            AiScoreTxt.text = (--AiScore).ToString();
+        else if (whichScore == "PlayerGoal" && PlayerScore > 0)
+            PlayerScoreTxt.text = (--PlayerScore).ToString();
     }
 
     public void ResetScores()
     {
-        AiScore = PlayerScore = 0;
+        AiScore = 0;
+        PlayerScore = 0;
         AiScoreTxt.text = PlayerScoreTxt.text = "0";
     }
 }

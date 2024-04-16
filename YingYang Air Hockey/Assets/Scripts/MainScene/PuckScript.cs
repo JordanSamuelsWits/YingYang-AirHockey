@@ -24,7 +24,7 @@ public class PuckScript : MonoBehaviour
     {
         if (!WasGoal)
         {
-            if (other.CompareTag("Player") || other.CompareTag("Ai"))
+            if (other.CompareTag("PlayerRed") || other.CompareTag("PlayerBlue")) // Check player tags
             {
                 if (lastPlayer == null || lastPlayer != other.gameObject)
                 {
@@ -33,19 +33,19 @@ public class PuckScript : MonoBehaviour
                 else
                 {
                     // Deduct a point from the player who hit the puck more than once
-                    DeductPoint(lastPlayer);
+                    ScoreScriptInstance.DecrementScore(other.CompareTag("PlayerRed") ? "PlayerGoal" : "AiGoal");
                 }
             }
-            else if (other.tag == "AiGoal")
+            else if (other.CompareTag("AiGoal"))
             {
-                ScoreScriptInstance.Increment(ScoreScript.Score.PlayerScore);
+                ScoreScriptInstance.IncrementScore("PlayerGoal"); // Player scores
                 WasGoal = true;
                 audioManager.PlayGoal();
                 StartCoroutine(ResetPuck(false));
             }
-            else if (other.tag == "PlayerGoal")
+            else if (other.CompareTag("PlayerGoal"))
             {
-                ScoreScriptInstance.Increment(ScoreScript.Score.AiScore);
+                ScoreScriptInstance.IncrementScore("AiGoal"); // AI scores
                 WasGoal = true;
                 audioManager.PlayGoal();
                 StartCoroutine(ResetPuck(true));
@@ -74,13 +74,13 @@ public class PuckScript : MonoBehaviour
     private void DeductPoint(GameObject player)
     {
         // Determine which player to deduct a point from based on tag
-        if (player.CompareTag("Player"))
+        if (player.CompareTag("PlayerRed"))
         {
-            ScoreScriptInstance.Increment(ScoreScript.Score.AiScore); // Deduct point from AI
+            ScoreScriptInstance.DecrementScore("PlayerGoal"); // Deduct point from player (Blue)
         }
-        else if (player.CompareTag("Ai"))
+        else if (player.CompareTag("PlayerBlue"))
         {
-            ScoreScriptInstance.Increment(ScoreScript.Score.PlayerScore); // Deduct point from player
+            ScoreScriptInstance.DecrementScore("AiGoal"); // Deduct point from AI (Red)
         }
     }
 

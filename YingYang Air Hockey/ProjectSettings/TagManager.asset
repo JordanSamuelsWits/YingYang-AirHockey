@@ -11,6 +11,8 @@ TagManager:
   - Puck
   - PortalB2
   - PortalR2
+  - PlayerBlue
+  - PlayerRed
   layers:
   - Default
   - TransparentFX
