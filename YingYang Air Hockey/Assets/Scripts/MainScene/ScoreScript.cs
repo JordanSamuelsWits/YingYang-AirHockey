@@ -3,17 +3,17 @@ using TMPro;
 
 public class ScoreScript : MonoBehaviour
 {
-    public TMP_Text AiScoreTxt;     // Text component displaying AI's score
-    public TMP_Text PlayerScoreTxt; // Text component displaying player's score
+    public TMP_Text AiScoreTxt;
+    public TMP_Text PlayerScoreTxt;
 
-    public UiManager uiManager; // Reference to the UI manager script
+    public UiManager uiManager;
 
-    public int MaxScore; // Maximum score required to win
+    public int MaxScore;
 
-    private int aiScore;    // Current AI score
-    private int playerScore; // Current player score
+    private int aiScore;
+    private int playerScore;
 
-    // Property to encapsulate AI's score and trigger UI update when AI wins
+    #region
     private int AiScore
     {
         get { return aiScore; }
@@ -21,11 +21,10 @@ public class ScoreScript : MonoBehaviour
         {
             aiScore = value;
             if (value == MaxScore)
-                uiManager.ShowRestartCanvas(false); // AI wins, show restart canvas
+                uiManager.ShowRestartCanvas(false); // AI wins
         }
     }
 
-    // Property to encapsulate player's score and trigger UI update when player wins
     private int PlayerScore
     {
         get { return playerScore; }
@@ -33,33 +32,30 @@ public class ScoreScript : MonoBehaviour
         {
             playerScore = value;
             if (value == MaxScore)
-                uiManager.ShowRestartCanvas(true); // Player wins, show restart canvas
+                uiManager.ShowRestartCanvas(true); // Player wins
         }
     }
-
-    // Increment the specified score (AI or player)
+    #endregion
     public void IncrementScore(string whichScore)
     {
         if (whichScore == "AiGoal")
-            AiScoreTxt.text = (++AiScore).ToString(); // Increment and update AI's score
+            AiScoreTxt.text = (++AiScore).ToString();
         else if (whichScore == "PlayerGoal")
-            PlayerScoreTxt.text = (++PlayerScore).ToString(); // Increment and update player's score
+            PlayerScoreTxt.text = (++PlayerScore).ToString();
     }
 
-    // Decrement the specified score (AI or player) if score is greater than 0
     public void DecrementScore(string whichScore)
     {
         if (whichScore == "AiGoal" && AiScore > 0)
-            AiScoreTxt.text = (--AiScore).ToString(); // Decrement and update AI's score
+            AiScoreTxt.text = (--AiScore).ToString();
         else if (whichScore == "PlayerGoal" && PlayerScore > 0)
-            PlayerScoreTxt.text = (--PlayerScore).ToString(); // Decrement and update player's score
+            PlayerScoreTxt.text = (--PlayerScore).ToString();
     }
 
-    // Reset both AI's and player's scores to zero
     public void ResetScores()
     {
-        AiScore = 0; // Reset AI's score
-        PlayerScore = 0; // Reset player's score
-        AiScoreTxt.text = PlayerScoreTxt.text = "0"; // Update UI to display zero scores
+        AiScore = 0;
+        PlayerScore = 0;
+        AiScoreTxt.text = PlayerScoreTxt.text = "0";
     }
 }

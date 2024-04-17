@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class PuckScript : MonoBehaviour
 {
-    public ScoreScript ScoreScriptInstance; // Reference to the ScoreScript instance
-    public static bool WasGoal { get; private set; } // Flag to track if a goal was scored
-    public float MaxSpeed; // Maximum speed limit for the puck
+    public ScoreScript ScoreScriptInstance;
+    public static bool WasGoal { get; private set; }
+    public float MaxSpeed;
 
-    public AudioManager audioManager; // Reference to the AudioManager for playing audio
+    public AudioManager audioManager;
 
     private Rigidbody2D rb;
     private GameObject lastPlayer; // Track the last player who hit the puck
@@ -22,9 +22,9 @@ public class PuckScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!WasGoal) // Check if a goal was not scored yet
+        if (!WasGoal)
         {
-            if (other.CompareTag("PlayerRed") || other.CompareTag("PlayerBlue")) // Check for player collisions
+            if (other.CompareTag("PlayerRed") || other.CompareTag("PlayerBlue")) // Check player tags
             {
                 if (lastPlayer == null || lastPlayer != other.gameObject)
                 {
@@ -38,26 +38,24 @@ public class PuckScript : MonoBehaviour
             }
             else if (other.CompareTag("AiGoal"))
             {
-                // Player scores a goal
-                ScoreScriptInstance.IncrementScore("PlayerGoal");
+                ScoreScriptInstance.IncrementScore("PlayerGoal"); // Player scores
                 WasGoal = true;
-                audioManager.PlayGoal(); // Play goal audio
-                StartCoroutine(ResetPuck(false)); // Reset puck after scoring
+                audioManager.PlayGoal();
+                StartCoroutine(ResetPuck(false));
             }
             else if (other.CompareTag("PlayerGoal"))
             {
-                // AI scores a goal
-                ScoreScriptInstance.IncrementScore("AiGoal");
+                ScoreScriptInstance.IncrementScore("AiGoal"); // AI scores
                 WasGoal = true;
-                audioManager.PlayGoal(); // Play goal audio
-                StartCoroutine(ResetPuck(true)); // Reset puck after scoring
+                audioManager.PlayGoal();
+                StartCoroutine(ResetPuck(true));
             }
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        audioManager.PlayPuckCollision(); // Play collision audio when puck hits something
+        audioManager.PlayPuckCollision();
     }
 
     private IEnumerator ResetPuck(bool didAiScore)
@@ -65,22 +63,34 @@ public class PuckScript : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f); // Wait for a moment before resetting
         WasGoal = false;
         rb.velocity = Vector2.zero;
-        CenterPuck(); // Reset puck position to the center
+        CenterPuck(); // Reset puck position
 
-        // Move puck to the appropriate side based on which team scored
         if (didAiScore)
             rb.position = new Vector2(0f, -1.6f); // AI scored, reset to player side
         else
             rb.position = new Vector2(0f, 1.6f); // Player scored, reset to AI side
     }
 
+    private void DeductPoint(GameObject player)
+    {
+        // Determine which player to deduct a point from based on tag
+        if (player.CompareTag("PlayerRed"))
+        {
+            ScoreScriptInstance.DecrementScore("PlayerGoal"); // Deduct point from player (Blue)
+        }
+        else if (player.CompareTag("PlayerBlue"))
+        {
+            ScoreScriptInstance.DecrementScore("AiGoal"); // Deduct point from AI (Red)
+        }
+    }
+
     public void CenterPuck()
     {
-        rb.position = Vector2.zero; // Reset puck to the center of the playing area
+        rb.position = Vector2.zero; // Reset puck to the center
     }
 
     private void FixedUpdate()
     {
-        rb.velocity = Vector2.ClampMagnitude(rb.velocity, MaxSpeed); // Limit the puck's velocity
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, MaxSpeed);
     }
 }

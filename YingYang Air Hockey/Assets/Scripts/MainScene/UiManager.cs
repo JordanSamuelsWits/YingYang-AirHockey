@@ -6,23 +6,23 @@ using UnityEngine.SceneManagement;
 public class UiManager : MonoBehaviour
 {
     [Header("Canvas")]
-    public GameObject CanvasGame;    // Reference to the main game canvas
-    public GameObject CanvasRestart; // Reference to the restart canvas
-    public GameObject Portals;       // Reference to the GameObject containing portals
+    public GameObject CanvasGame;
+    public GameObject CanvasRestart;
+    public GameObject Portals; // Reference to the GameObject containing portals
 
     [Header("CanvasRestart Children")]
-    public GameObject WinTxt;    // Text displaying win message
-    public GameObject LoseTxt;   // Text displaying lose message
-    public GameObject RestartBtn; // Button to restart the game
+    public GameObject WinTxt;
+    public GameObject LoseTxt;
+    public GameObject RestartBtn;
 
     [Header("Other")]
-    public AudioManager audioManager; // Reference to the audio manager
+    public AudioManager audioManager;
 
-    public ScoreScript scoreScript;    // Reference to the score script
-    public PuckScript puckScript;      // Reference to the puck script
-    public PlayerMovement playerMovement; // Reference to the player movement script
-    public AiScript aiScript;          // Reference to the AI script
-    public Portal portalScript;        // Reference to the portal script
+    public ScoreScript scoreScript;
+    public PuckScript puckScript;
+    public PlayerMovement playerMovement;
+    public AiScript aiScript;
+
 
     private void Start()
     {
@@ -40,14 +40,13 @@ public class UiManager : MonoBehaviour
         StartCoroutine(ManagePortals());
     }
 
-    // Coroutine to manage the activation and deactivation of portals
     private IEnumerator ManagePortals()
     {
         yield return new WaitForSeconds(5f); // Initial delay before portals activate
 
         while (true)
         {
-            ActivatePortals();                  // Activate portals
+            ActivatePortals(); // Activate portals
             audioManager.PlayPortalActivation(); // Play portal activation audio
 
             yield return new WaitForSeconds(15f); // Portals remain active for 15 seconds
@@ -58,24 +57,21 @@ public class UiManager : MonoBehaviour
         }
     }
 
-    // Activate the portals GameObject
     private void ActivatePortals()
     {
         if (Portals != null)
             Portals.SetActive(true); // Activate the Portals GameObject
     }
 
-    // Deactivate the portals GameObject
     private void DeactivatePortals()
     {
         if (Portals != null)
             Portals.SetActive(false); // Deactivate the Portals GameObject
     }
 
-    // Show the restart canvas based on whether AI won or not
     public void ShowRestartCanvas(bool didAiWin)
     {
-        Time.timeScale = 0; // Pause the game
+        Time.timeScale = 0;
 
         CanvasGame.SetActive(false);  // Deactivate CanvasGame
         CanvasRestart.SetActive(true);  // Activate CanvasRestart
@@ -104,28 +100,26 @@ public class UiManager : MonoBehaviour
         }
     }
 
-    // Restart the game
     public void RestartGame()
     {
-        Time.timeScale = 1; // Resume time scale (unpause game)
+        Time.timeScale = 1;
 
         CanvasGame.SetActive(true);  // Activate CanvasGame
         CanvasRestart.SetActive(false);  // Deactivate CanvasRestart
 
         // Reset game components
-        scoreScript.ResetScores();    // Reset scores
-        puckScript.CenterPuck();      // Center the puck
-        playerMovement.ResetPosition(); // Reset player's position
-        aiScript.ResetPosition();     // Reset AI's position
+        scoreScript.ResetScores();
+        puckScript.CenterPuck();
+        playerMovement.ResetPosition();
+        aiScript.ResetPosition();
 
         // Restart the coroutine for portal management
         StartCoroutine(ManagePortals());
     }
 
-    // Load the main menu scene
     public void ShowMenu()
     {
-        Time.timeScale = 1; // Resume time scale (unpause game)
-        SceneManager.LoadScene("Menu"); // Load the menu scene
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Menu");
     }
 }
